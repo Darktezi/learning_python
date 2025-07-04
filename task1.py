@@ -80,7 +80,7 @@ def choice_menu() -> str:
     return choise
 
 
-def str_to_dict(str: str, dict: dict[str, int]) -> None:
+def str_to_dict(str: str, dict: dict[str, list[int]]) -> None:
     for index, char in enumerate(str):
         if char not in dict:
             dict[char] = [index]
