@@ -4,16 +4,14 @@ from collections import deque
 import random
 
 
-stone_emoji = "\U0001F5FF"
-MAP_HEIGHT = 15
-MAP_WEIGHT = 50
+MAP_HEIGHT = 10
+MAP_WEIGHT = 10
 
 
 class Point():
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
-        self.data=[x, y]
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Point):
@@ -26,9 +24,17 @@ class Point():
     def __repr__(self):
         return f"({self.x}, {self.y})"
 
+    def find_neighbors(self):
+        neighbors = []
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        for dx, dy in directions:
+                neighbor = Point(self.x + dx, self.y + dy)
+                neighbors.append(neighbor)
+        return neighbors
+
 
 class Entity(ABC):
-    def __init__(self, point: Point, icon):
+    def __init__(self, point: Point, icon: str):
         self.point = point
         self.icon = icon
 
@@ -41,10 +47,9 @@ class Entity(ABC):
 
 class Creature(Entity):
     def __init__(self, point: Point, speed: int, health: int, icon: str):
-        self.point = point
+        super().__init__(point, icon)
         self.speed = speed
         self.health = health
-        self.icon = icon
         self.current_path = None
     
     def makeMove(self, world):
@@ -77,18 +82,24 @@ class Creature(Entity):
 
 
 class Herbivore(Creature):
-    def __init__(self, point: Point, speed: int, health: int, icon: str="🐑"):
+    def __init__(self, point: Point, speed: int=2, health: int=2, icon: str="🐑"):
         super().__init__(point, speed, health, icon)
+
+
+class Predator(Creature):
+    def __init__(self, point: Point, speed: int=3, health: int=2, damage: int=1, icon: str="🐅"):
+        super().__init__(point, speed, health, icon)
+        self.damage = damage
 
  
 
 class Grass(Entity):
-    def __init__(self, point: Point, icon="☘️"):
+    def __init__(self, point: Point, icon="🌿"):
         super().__init__(point, icon)
 
 
 class Rock(Entity):
-    def __init__(self, point: Point, icon="⛰️"):
+    def __init__(self, point: Point, icon="🗿"):
         super().__init__(point, icon)
         
 
@@ -122,7 +133,7 @@ class Map():
     def get_weight(self) -> int:
         return self.weight
     
-    def get_entity(self, coordinate: Point) -> Optional[Entity]:
+    def get_entity(self, coordinate: Point) -> Entity | None:
         return self.coordinates.get(coordinate)
     
     def set_entity(self, object: Entity) -> None:
@@ -132,7 +143,7 @@ class Map():
         if point in self.coordinates:
             del self.coordinates[point]
 
-    def find_path(self, start: Point) -> Optional[list]:
+    def find_path(self, start: Point) -> list | None:
         start_entity = self.get_entity(start)
         
         # Если уже стоим на траве
@@ -156,9 +167,9 @@ class Map():
                 path.reverse()
                 return path
             
-            # Проверяем соседние клетки
-            for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-                neighbor = Point(current.x + dx, current.y + dy)
+            neighbors = current.find_neighbors()
+
+            for neighbor in neighbors:
                 
                 # Проверка выхода за границы карты
                 if neighbor.x < 0 or neighbor.x >= self.weight or neighbor.y < 0 or neighbor.y >= self.height:
@@ -181,7 +192,7 @@ class Map():
         return None
         
 
-class Renderer():
+class Renderer(): 
     def __init__(self, world: Map):
         self.world = world
     
@@ -192,39 +203,41 @@ class Renderer():
                 if entity:
                     print(entity, end="")
                 else:
-                    print("-", end="")
+                    print(" .", end="")
             print()
 
 
-def main():
-    static_objects = 5
-    # Исправленный порядок размеров: высота, ширина
-    world = Map(MAP_HEIGHT, MAP_WEIGHT)
-    targets = []
+class Actions():
+    def __init__(self) -> None:
+        self.proportion = {
+            Rock: 0.1,
+            Tree: 0.1,
+            Grass: 0.1,
+            Herbivore: 0.1,
+            Predator: 0.03
+        }
+    def spawn_objects(self, world: Map):
+        world_size = float(world.height * world.weight)
+        counter = 0
+        for obj in self.proportion:
+            number_of_obj = (self.proportion[obj] * world_size)//1
+            while counter != number_of_obj:
+                object = obj(Point(random.randint(0, MAP_WEIGHT-1), random.randint(0, MAP_HEIGHT-1)))
+                world.set_entity(object)
+                counter += 1
+            counter = 0
 
-    # Создаем объекты
-    for _ in range(static_objects):
-        rock = Rock(Point(random.randint(0, MAP_WEIGHT-1), random.randint(0, MAP_HEIGHT-1)))
-        tree = Tree(Point(random.randint(0, MAP_WEIGHT-1), random.randint(0, MAP_HEIGHT-1)))
-        grass = Grass(Point(random.randint(0, MAP_WEIGHT-1), random.randint(0, MAP_HEIGHT-1)))
-        world.set_entity(rock)
-        world.set_entity(tree)
-        world.set_entity(grass)
-        targets.append(grass.point)
-    
-    
-    # позиция травоядного
-    herbivore = Herbivore(Point(random.randint(0, MAP_WEIGHT-1), random.randint(0, MAP_HEIGHT-1)), 2, 3)
-    world.set_entity(herbivore)
-    
-    print("Начальное состояние:")
-    Renderer(world).render_map()
-    
-    # Запускаем 5 шагов симуляции
-    for turn in range(5):
-        print(f"\nХод {turn + 1}:")
-        herbivore.makeMove(world)
-        Renderer(world).render_map()
+        
+
+
+def main():
+    # Исправленный порядок размеров: высота, ширина
+    act = Actions()
+    world = Map(MAP_HEIGHT, MAP_WEIGHT)
+    act.spawn_objects(world)
+    render = Renderer(world)
+    render.render_map()
+
         
 if __name__ == "__main__":
     main()
