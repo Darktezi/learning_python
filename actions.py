@@ -23,7 +23,7 @@ class Actions():
             number_of_obj = ((self.proportion[obj] * world_size)//1) - len(active_obj)
             while number_of_obj:
                 object = obj(Point(random.randint(0, MAP_WEIGHT-1), random.randint(0, MAP_HEIGHT-1)))
-                while self.world.get_entity(object) != None:
+                while self.world.get_entity(object.point) != None:
                     object = obj(Point(random.randint(0, MAP_WEIGHT-1), random.randint(0, MAP_HEIGHT-1)))
                 self.world.set_entity(object)
                     
