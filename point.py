@@ -1,5 +1,5 @@
 class Point():
-    def __init__(self, x=0, y=0):
+    def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
 
@@ -11,10 +11,10 @@ class Point():
     def __hash__(self) -> int:
         return hash((self.x, self.y))
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"({self.x}, {self.y})"
 
-    def find_neighbors(self):
+    def find_neighbors(self) -> list:
         neighbors = []
         directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         for dx, dy in directions:

@@ -16,7 +16,7 @@ class Actions():
         }
         self.world = world
 
-    def spawn_objects(self):
+    def spawn_objects(self) -> None:
         world_size = float(self.world.height * self.world.weight)
         for obj in self.proportion:
             active_obj = self.world.get_all_obj(obj)
@@ -29,7 +29,7 @@ class Actions():
                     
                 number_of_obj -= 1
     
-    def find_paths(self, start: Point, target_type: type): # обработать None
+    def find_paths(self, start: Point, target_type: type) -> list:
         paths = []
     
         visited: dict = {start: None}
@@ -75,7 +75,7 @@ class Actions():
                 min = len(i)
         return min_path
     
-    def turn_actions(self):
+    def turn_actions(self) -> None:
         sheeps = self.world.get_all_obj(Herbivore)
         wolfs = self.world.get_all_obj(Predator)
 
@@ -108,7 +108,7 @@ class Actions():
                     next_point = path[i]
                     next_entity = self.world.get_entity(next_point)
                     if isinstance(next_entity, Creature) and next_entity.health > wolf.damage:
-                        next_entity.health -= 1
+                        next_entity.health -= wolf.damage
                         continue
                     else:
                         self.world.remove_entity(wolf.point)
@@ -119,7 +119,7 @@ class Actions():
                     next_point = path[i]
                     next_entity = self.world.get_entity(next_point)
                     if isinstance(next_entity, Creature) and next_entity.health > wolf.damage:
-                        next_entity.health -= 1
+                        next_entity.health -= wolf.damage
                         continue
                     else:
                         self.world.remove_entity(wolf.point)

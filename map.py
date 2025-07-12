@@ -19,7 +19,7 @@ class Map():
     def get_weight(self) -> int:
         return self.weight
     
-    def get_entity(self, coordinate: Point):
+    def get_entity(self, coordinate: Point) -> Entity | None:
         return self.coordinates.get(coordinate)
     
     def set_entity(self, object: Entity) -> None:

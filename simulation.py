@@ -5,27 +5,27 @@ from time import sleep
 import keyboard
 
 class Simulation():
-    def __init__(self):
+    def __init__(self) -> None:
         self.world = Map(MAP_HEIGHT, MAP_WEIGHT)
         self.act = Actions(self.world)
         self.rend = Renderer(self.world)
         self.pause_event = Event()
         self.exit_event = Event()
 
-    def next_turn(self):
+    def next_turn(self) -> None:
         self.act.turn_actions()
         self.act.spawn_objects()
         print("=" * MAP_WEIGHT * 2)
         self.rend.render_map()
         print("=" * MAP_WEIGHT * 2)
 
-    def start_simulation(self):
+    def start_simulation(self) -> None:
         while not self.exit_event.is_set():
             if not self.pause_event.is_set():
                 self.next_turn()
             sleep(1)
 
-    def input_listener(self):
+    def input_listener(self) -> None:
         while not self.exit_event.is_set():
             if keyboard.is_pressed('2'):
                 self.pause_event.set()
