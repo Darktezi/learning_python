@@ -14,7 +14,7 @@ class Point():
     def __repr__(self) -> str:
         return f"({self.x}, {self.y})"
 
-    def find_neighbors(self) -> list:
+    def find_neighbors(self) -> list['Point']:
         neighbors = []
         directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         for dx, dy in directions:

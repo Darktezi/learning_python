@@ -19,6 +19,9 @@ class Map():
     def get_weight(self) -> int:
         return self.weight
     
+    def get_area(self) -> float:
+        return float(self.height * self.weight)
+    
     def get_entity(self, coordinate: Point) -> Entity | None:
         return self.coordinates.get(coordinate)
     
@@ -46,7 +49,7 @@ class Renderer():
     def __init__(self, world: Map):
         self.world = world
     
-    def render_map(self):
+    def render_map(self) -> None:
         for y in range(self.world.get_height()):
             for x in range(self.world.get_weight()):
                 entity = self.world.get_entity(Point(x, y))
