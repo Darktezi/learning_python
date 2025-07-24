@@ -1,1 +1,6 @@
 /__pycache__
+/css
+/js
+/currencies.db
+/exchange_rates.db
+/index.html
