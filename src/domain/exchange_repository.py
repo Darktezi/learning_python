@@ -27,7 +27,7 @@ class ExchangeRepository(TableRepository):
             )
             return cursor.fetchall()
     
-    def get_exchange_rate(self, base: str, target: str) -> float | None:
+    def get_exchange_rate(self, base: str, target: str) -> float:
         with DBCursor() as cursor:
             cursor.execute(
                             '''
@@ -38,10 +38,7 @@ class ExchangeRepository(TableRepository):
                             ''',
                             (base, target)      
             )
-            data = cursor.fetchone()
-            if data is None:
-                return None
-            return data[0]
+            return cursor.fetchone()[0]
     
     def get_id(self, base: str, target: str) -> int:
         with DBCursor() as cursor:
