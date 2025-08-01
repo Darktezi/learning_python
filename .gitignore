@@ -1,0 +1,6 @@
+/__pycache__
+/data/currencies.db
+/src/domain/__pycache__
+/src/db/__pycache__
+/src/api/__pycache__
+/src/__pycache__
