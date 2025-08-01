@@ -12,9 +12,9 @@ $(document).ready(function() {
                 tbody.empty();
                 $.each(data, function(index, currency) {
                     const row = $('<tr></tr>');
-                    row.append($('<td></td>').text(currency.Code));
-                    row.append($('<td></td>').text(currency.FullName));
-                    row.append($('<td></td>').text(currency.Sign));
+                    row.append($('<td></td>').text(currency.code));
+                    row.append($('<td></td>').text(currency.name));
+                    row.append($('<td></td>').text(currency.sign));
                     tbody.append(row);
                 });
 
@@ -23,7 +23,7 @@ $(document).ready(function() {
 
                 // populate the base currency select element with the list of currencies
                 $.each(data, function (index, currency) {
-                    newRateBaseCurrency.append(`<option value="${currency.Code}">${currency.Code}</option>`);
+                    newRateBaseCurrency.append(`<option value="${currency.code}">${currency.code}</option>`);
                 });
 
                 const newRateTargetCurrency = $("#new-rate-target-currency");
@@ -31,7 +31,7 @@ $(document).ready(function() {
 
                 // populate the target currency select element with the list of currencies
                 $.each(data, function (index, currency) {
-                    newRateTargetCurrency.append(`<option value="${currency.Code}">${currency.Code}</option>`);
+                    newRateTargetCurrency.append(`<option value="${currency.code}">${currency.code}</option>`);
                 });
 
                 const convertBaseCurrency = $("#convert-base-currency");
@@ -39,7 +39,7 @@ $(document).ready(function() {
 
                 // populate the base currency select element with the list of currencies
                 $.each(data, function (index, currency) {
-                    convertBaseCurrency.append(`<option value="${currency.Code}">${currency.Code}</option>`);
+                    convertBaseCurrency.append(`<option value="${currency.code}">${currency.code}</option>`);
                 });
 
                 const convertTargetCurrency = $("#convert-target-currency");
@@ -47,7 +47,7 @@ $(document).ready(function() {
 
                 // populate the base currency select element with the list of currencies
                 $.each(data, function (index, currency) {
-                    convertTargetCurrency.append(`<option value="${currency.Code}">${currency.Code}</option>`);
+                    convertTargetCurrency.append(`<option value="${currency.code}">${currency.code}</option>`);
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {

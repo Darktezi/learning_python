@@ -1,17 +1,17 @@
 from http.server import HTTPServer
-from request_handler import RequestHandler
-import utils
+from src.api.request_handler import RequestHandler
+import src.utils as utils
 
 class HttpProcessor(RequestHandler):
     def do_GET(self) -> None:
         if self.path == "/" or self.path == '/index.html':
-            utils.serve_file(self, 'index.html', 'text/html')
+            utils.serve_file(self, 'frontend/index.html', 'text/html')
 
         elif self.path.endswith('.css'):
-            utils.serve_file(self, self.path[1:], 'text/css')
+            utils.serve_file(self, 'frontend/' + self.path[1:], 'text/css')
 
         elif self.path.endswith('.js'):
-            utils.serve_file(self, self.path[1:], 'application/javascript')
+            utils.serve_file(self, 'frontend/' + self.path[1:], 'application/javascript')
 
         elif self.path == "/currencies":
             self.currencies_page()

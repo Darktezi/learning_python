@@ -1,12 +1,11 @@
-import utils
-
+from src.db.db_cursor import DBCursor
 
 def create_cdb() -> None:
-    with utils.db_cursor("currencies.db") as cursor:
+    with DBCursor() as cursor:
         cursor.execute(
             '''
             CREATE TABLE IF NOT EXISTS Currencies (
-            ID INTEGER PRIMARY KEY,
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Code TEXT NOT NULL,
             FullName TEXT NOT NULL,
             Sign TEXT NOT NULL
@@ -14,14 +13,12 @@ def create_cdb() -> None:
             '''
         )
 
-
 def create_edb() -> None:
-    with utils.db_cursor("exchange_rates.db") as cursor:
-        cursor.execute("PRAGMA foreign_keys = ON;")
+    with DBCursor() as cursor:
         cursor.execute(
             '''
             CREATE TABLE IF NOT EXISTS ExchangeRates (
-            ID INTEGER PRIMARY KEY,
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
             BaseCurrencyId INTEGER,
             TargetCurrencyId INTEGER,
             Rate REAL,
@@ -31,12 +28,10 @@ def create_edb() -> None:
             '''
         )
 
-
 def delete_cdb() -> None:
-    with utils.db_cursor("currencies.db") as cursor:
+    with DBCursor() as cursor:
         cursor.execute("DROP TABLE IF EXISTS Currencies;")
 
-
 def delete_edb() -> None:
-    with utils.db_cursor("exchange_rates.db") as cursor:
+    with DBCursor() as cursor:
         cursor.execute("DROP TABLE IF EXISTS ExchangeRates;")
